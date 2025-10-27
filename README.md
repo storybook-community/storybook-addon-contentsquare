@@ -143,17 +143,17 @@ addons.setConfig({
 Installing the addon allows the use of Hotjar feedback buttons. Go to the [Hotjar app](https://insights.hotjar.com/) and create a survey of type 'feedback button'. Once enabled, it should appear on your Storybook instance.
 
 ## Limitations
-This addon is limited in what it can record because of potential bugs and limitations in Contentsquare.
+This addon is limited in what it can record because of potential bugs and limitations in the Contentsquare integration.
 
 ### Timing of page view events
 
-Contentsquare does not always process `trackPageview` events and seemingly records page views whenever it wants (even when I never actually send `trackPageview` events). It seems to me whenever users navigate on a new page, Contentsquare tracks the *previous* page load. Contentsquare only records the *current* page load when events are fired manually from the DevTools console. I don't have time to debug this behaviour any further.
+Contentsquare does not appear to process `trackPageview` events as they are sent from the Storybook manager and seemingly records page views on its own (even when no `trackPageview` events are sent). Whenever users navigate on a new page, Contentsquare tracks the *previous* page load. Contentsquare only records the *current* page load when I manually fire `trackPageView` events from the DevTools console.
 
-Within the addon codebase, all Storybook lifecycle hooks are connected to the right callbacks to turn Storybook metadata into [custom vars](https://docs.contentsquare.com/en/web/sending-custom-vars/). This is disabled until someone finds a way to force Contentsquare events to record the current event. PRs are welcome.
+Within the addon codebase, all Storybook lifecycle hooks are connected to the right callbacks to turn Storybook metadata into Contentsquare [custom vars](https://docs.contentsquare.com/en/web/sending-custom-vars/). This feature is disabled until someone finds a way to force Contentsquare events to record the current event. PRs are welcome.
 
 ### Iframe tracking
 
-The Contentsquare documentation on [iframe support](https://docs.contentsquare.com/en/web/compatibility/#session-replay-and-iframes) is incomplete, and does not actually explain how Contentsquare users can enable `iFrameTracking`. Until that happens, support for heatmaps or in-page events is limited to the Storybook UI. No support will be provided and no PR will be accepted on this scope.
+The Contentsquare documentation on [iframe support](https://docs.contentsquare.com/en/web/compatibility/#session-replay-and-iframes) does not actually explain how Contentsquare users can enable `iFrameTracking`. As a result, support for heatmaps or in-page events is limited to the Storybook UI. I don't know how to get iframe tracking to work. No support will be provided and no PR will be accepted on this scope because I also won't know how to maintain any contributed code without a clearer upstream documentation.
 
 ## Contributing
 

@@ -109,7 +109,7 @@
     "provenance": true,
     "registry": "https://registry.npmjs.org/"
   },
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@12.16.1",
   "engines": {
     "node": ">=22.19"
   },

@@ -55,7 +55,7 @@
     "prerelease": "zx scripts/prepublish-checks.js",
     "release": "pnpm build && pnpm semantic-release",
     "release:canary": "pnpm build && zx scripts/release-canary.js",
-    "start": "run-p build:watch \"storybook --quiet\"",
+    "start": "pnpm storybook",
     "storybook": "storybook dev -p 6006",
     "test": "vitest",
     "test:coverage": "vitest --coverage"
@@ -83,7 +83,6 @@
     "globals": "^17.14.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.1",
-    "npm-run-all2": "^9.0.4",
     "playwright": "^1.65.1",
     "prettier": "^3.10.1",
     "prompts": "^2.4.2",

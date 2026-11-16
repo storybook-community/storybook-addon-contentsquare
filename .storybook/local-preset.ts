@@ -5,5 +5,5 @@ export function previewAnnotations(entry = []) {
 }
 
 export function managerEntries(entry = []) {
-  return [...entry, fileURLToPath(import.meta.resolve('../dist/manager.js'))]
+  return [...entry, fileURLToPath(import.meta.resolve('../src/manager.tsx'))]
 }

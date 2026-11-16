@@ -51,7 +51,7 @@ addons.register(ADDON_ID, () => {
   const s = document.getElementsByTagName('script')[0]
   g.type = 'text/javascript'
   g.async = true
-  g.src = `//t.contentsquare.net/uxa/${process.env.STORYBOOK_CONTENTSQUARE_TAG_ID}.js`
+  g.src = `//t.contentsquare.net/uxa/${config[KEY].tagId}.js`
 
   if (!s || !s.parentNode) {
     logger.error('Failed to find where to inject Contentsquare script element.')

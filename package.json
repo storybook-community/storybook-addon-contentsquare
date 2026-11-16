@@ -83,6 +83,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-storybook": "next",
     "globals": "^17.14.0",
+    "happy-dom": "^21.0.4",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.1",
     "playwright": "^1.65.1",

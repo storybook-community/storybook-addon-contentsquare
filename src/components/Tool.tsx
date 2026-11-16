@@ -1,11 +1,6 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { addons } from 'storybook/manager-api'
-import {
-  Badge,
-  Button,
-  Modal,
-  PopoverProvider,
-} from 'storybook/internal/components'
+import { Badge, Button, PopoverProvider } from 'storybook/internal/components'
 import { logger } from 'storybook/internal/client-logger'
 import { styled } from 'storybook/theming/emotion'
 
@@ -73,10 +68,6 @@ export const Tool = function Tool() {
   const setConsent = useConsentStore((state) => state.setConsent)
   const currentlyTracking = consentStatus === 'opted-in'
 
-  // Ask for consent in a modal on first run. Dismissing it records no choice,
-  // so tracking stays off and the modal shows again on the next visit.
-  const [modalOpen, setModalOpen] = useState(consentStatus === null)
-
   const getActions = useCallback(
     (close: () => void) => {
       const actions = []
@@ -122,64 +113,39 @@ export const Tool = function Tool() {
         ? optedOutDesc
         : initialConsentDesc
 
-  if (!tagId) {
-    return null
-  }
-
-  return (
-    <>
-      <Modal
-        ariaLabel={consentTitle}
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        width={480}
-      >
-        <Modal.Content>
-          <Modal.Header>
-            <Modal.Title>{consentTitle}</Modal.Title>
-            <Modal.Description>{desc}</Modal.Description>
-          </Modal.Header>
-          <Modal.Actions>
-            {getActions(() => setModalOpen(false)).map(({ title, onClick }) => (
+  return tagId ? (
+    <PopoverProvider
+      ariaLabel={consentTitle}
+      defaultVisible={consentStatus === null}
+      placement="bottom-end"
+      padding={15}
+      popover={({ onHide }) => (
+        <Message id="contentsquare-consent-popover">
+          <Title>{consentTitle}</Title>
+          <span>{desc}</span>
+          <Actions>
+            {getActions(onHide).map(({ title, onClick }) => (
               <Button key={title} ariaLabel={false} onClick={onClick}>
                 {title}
               </Button>
             ))}
-          </Modal.Actions>
-        </Modal.Content>
-      </Modal>
-      <PopoverProvider
-        ariaLabel={consentTitle}
-        placement="bottom-end"
-        padding={15}
-        popover={({ onHide }) => (
-          <Message id="contentsquare-consent-popover">
-            <Title>{consentTitle}</Title>
-            <span>{desc}</span>
-            <Actions>
-              {getActions(onHide).map(({ title, onClick }) => (
-                <Button key={title} ariaLabel={false} onClick={onClick}>
-                  {title}
-                </Button>
-              ))}
-            </Actions>
-          </Message>
-        )}
+          </Actions>
+        </Message>
+      )}
+    >
+      <Button
+        ariaLabel={
+          currentlyTracking
+            ? 'Contentsquare tracking enabled'
+            : 'Contentsquare tracking disabled'
+        }
+        variant="ghost"
+        size="small"
+        padding="small"
       >
-        <Button
-          ariaLabel={
-            currentlyTracking
-              ? 'Contentsquare tracking enabled'
-              : 'Contentsquare tracking disabled'
-          }
-          variant="ghost"
-          size="small"
-          padding="small"
-        >
-          <CSLogoIcon />
-          {currentlyTracking && <EnabledPill />}
-        </Button>
-      </PopoverProvider>
-    </>
-  )
+        <CSLogoIcon />
+        {currentlyTracking && <EnabledPill />}
+      </Button>
+    </PopoverProvider>
+  ) : null
 }

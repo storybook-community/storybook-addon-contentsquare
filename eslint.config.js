@@ -1,6 +1,7 @@
 import js from '@eslint/js'
 import prettierRecommended from 'eslint-plugin-prettier/recommended'
 import reactPlugin from 'eslint-plugin-react'
+import storybook from 'eslint-plugin-storybook'
 import tseslint from 'typescript-eslint'
 import globals from 'globals'
 
@@ -43,4 +44,5 @@ export default [
     },
   },
   prettierRecommended,
+  ...storybook.configs['flat/recommended'],
 ]

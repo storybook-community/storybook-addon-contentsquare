@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '../../.storybook/preview'
 import { fn } from 'storybook/test'
 
 import { Button } from './Button'
 
-const meta: Meta<typeof Button> = {
+const meta = preview.meta({
   title: 'Example/Button',
   component: Button,
   argTypes: {
@@ -11,50 +11,47 @@ const meta: Meta<typeof Button> = {
     // onClick: fn
   },
   tags: [],
-}
+})
 
-export default meta
-type Story = StoryObj<typeof Button>
-
-export const Primary: Story = {
+export const Primary = meta.story({
   args: {
     primary: true,
     label: 'Button',
     onClick: fn().mockName('clicked'),
   },
-}
+})
 
-export const Secondary: Story = {
+export const Secondary = meta.story({
   args: {
     label: 'Button',
   },
-}
+})
 
-export const Large: Story = {
+export const Large = meta.story({
   args: {
     size: 'large',
     label: 'Button',
   },
-}
+})
 
-export const Medium: Story = {
+export const Medium = meta.story({
   args: {
     size: 'medium',
     label: 'Button',
   },
-}
+})
 
-export const MediumSizeButton: Story = {
+export const MediumSizeButton = meta.story({
   args: {
     size: 'medium',
     label: 'Button',
   },
-}
-MediumSizeButton.tags = ['deprecated']
+  tags: ['deprecated'],
+})
 
-export const Small: Story = {
+export const Small = meta.story({
   args: {
     size: 'small',
     label: 'Button',
   },
-}
+})

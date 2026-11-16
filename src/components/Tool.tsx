@@ -1,13 +1,8 @@
 import React, { useCallback } from 'react'
 import { addons } from 'storybook/manager-api'
-import {
-  Badge,
-  IconButton,
-  TooltipMessage,
-  WithTooltip,
-} from 'storybook/internal/components'
+import { Badge, Button, PopoverProvider } from 'storybook/internal/components'
 import { logger } from 'storybook/internal/client-logger'
-import { styled } from 'storybook/theming'
+import { styled } from 'storybook/theming/emotion'
 
 import { KEY } from '../constants'
 import type { ContentsquareConfig } from '../types'
@@ -34,6 +29,24 @@ const EnabledPill = styled(Badge)(({ theme }) => ({
   color: theme.color.lightest,
 }))
 
+const Message = styled.div(({ theme }) => ({
+  width: 280,
+  boxSizing: 'border-box',
+  color: theme.color.defaultText,
+  lineHeight: '18px',
+}))
+
+const Title = styled.div(({ theme }) => ({
+  fontWeight: theme.typography.weight.bold,
+}))
+
+const Actions = styled.div({
+  display: 'flex',
+  justifyContent: 'center',
+  gap: 8,
+  marginTop: 8,
+})
+
 export const Tool = function Tool() {
   const { [KEY]: parameters } = addons.getConfig() as {
     [KEY]: ContentsquareConfig
@@ -55,12 +68,12 @@ export const Tool = function Tool() {
   const setConsent = useConsentStore((state) => state.setConsent)
   const currentlyTracking = consentStatus === 'opted-in'
 
-  const getLinks = useCallback(
+  const getActions = useCallback(
     (close: () => void) => {
-      const links = []
+      const actions = []
 
       if (consentStatus !== 'opted-out') {
-        links.push({
+        actions.push({
           title: consentStatus === null ? initialRefuseLabel : refuseLabel,
           onClick: () => {
             logger.debug('User refused Contentsquare tracking.')
@@ -71,7 +84,7 @@ export const Tool = function Tool() {
       }
 
       if (consentStatus !== 'opted-in') {
-        links.push({
+        actions.push({
           title: consentStatus === null ? initialAcceptLabel : acceptLabel,
           onClick: () => {
             logger.debug('User accepted Contentsquare tracking.')
@@ -81,7 +94,7 @@ export const Tool = function Tool() {
         })
       }
 
-      return links
+      return actions
     },
     [
       consentStatus,
@@ -100,35 +113,39 @@ export const Tool = function Tool() {
         ? optedOutDesc
         : initialConsentDesc
 
-  // TODO: Fix accessibility for 10.1 with the new popover components.
   return tagId ? (
-    <WithTooltip
-      trigger="click"
-      startOpen={consentStatus === null}
+    <PopoverProvider
+      ariaLabel={consentTitle}
+      defaultVisible={consentStatus === null}
       placement="bottom-end"
-      tooltip={({ onHide }) => (
-        <div id="contentsquare-consent-popover">
-          <TooltipMessage
-            title={consentTitle}
-            desc={desc}
-            links={getLinks(onHide)}
-          />
-        </div>
+      padding={15}
+      popover={({ onHide }) => (
+        <Message id="contentsquare-consent-popover">
+          <Title>{consentTitle}</Title>
+          <span>{desc}</span>
+          <Actions>
+            {getActions(onHide).map(({ title, onClick }) => (
+              <Button key={title} ariaLabel={false} onClick={onClick}>
+                {title}
+              </Button>
+            ))}
+          </Actions>
+        </Message>
       )}
     >
-      <IconButton
-        aria-label={
+      <Button
+        ariaLabel={
           currentlyTracking
             ? 'Contentsquare tracking enabled'
             : 'Contentsquare tracking disabled'
         }
-        aria-haspopup="dialog"
+        variant="ghost"
         size="small"
         padding="small"
       >
         <CSLogoIcon />
         {currentlyTracking && <EnabledPill />}
-      </IconButton>
-    </WithTooltip>
+      </Button>
+    </PopoverProvider>
   ) : null
 }

@@ -39,28 +39,55 @@ Once you've created your project, visit [this page](https://app.contentsquare.co
 
 
 ### Install addon
-Install:
+
+This addon requires Storybook 11. Run the following command to install and register the addon:
 
 ```sh
-yarn add -D storybook-addon-contentsquare
+npx storybook add @storybook-community/storybook-addon-contentsquare
+```
+
+Or install it manually:
+
+```sh
+yarn add -D @storybook-community/storybook-addon-contentsquare
 ```
 
 ```sh
-npm install -D storybook-addon-contentsquare
+npm install -D @storybook-community/storybook-addon-contentsquare
 ```
 
 ```sh
-pnpm install -D storybook-addon-contentsquare
+pnpm install -D @storybook-community/storybook-addon-contentsquare
 ```
 
 ### Configure addon
-In your `.storybook/main.ts` file, add the following:
+If you installed the addon manually, register it in your `.storybook/main.ts` file:
 
 ```ts
 // .storybook/main.ts
-export default {
-  addons: ['storybook-addon-contentsquare'],
-}
+
+// Replace your-framework with the framework you are using (e.g., react-vite, nextjs-vite)
+import { defineMain } from '@storybook/your-framework/node'
+
+export default defineMain({
+  // ...rest of config
+  addons: ['@storybook-community/storybook-addon-contentsquare'],
+})
+```
+
+Then register the addon's preview annotations in your `.storybook/preview.ts` file:
+
+```ts
+// .storybook/preview.ts
+
+// Replace your-framework with the framework you are using (e.g., react-vite, nextjs-vite)
+import { definePreview } from '@storybook/your-framework'
+import addonContentsquare from '@storybook-community/storybook-addon-contentsquare'
+
+export default definePreview({
+  // ...rest of preview
+  addons: [addonContentsquare()],
+})
 ```
 
 In your `.storybook/manager.ts` file, add the following config, reusing the tagId you found in your Cntentsquare settings:

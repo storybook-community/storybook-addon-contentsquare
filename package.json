@@ -64,9 +64,9 @@
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^9.39.4",
     "@storybook/addon-docs": "next",
-    "@storybook/icons": "^1.6.0",
+    "@storybook/icons": "^2.2.0",
     "@storybook/react-vite": "next",
-    "@types/node": "^25.6.0",
+    "@types/node": "^22.19.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
@@ -80,6 +80,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-storybook": "next",
     "globals": "^17.8.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
@@ -102,7 +103,7 @@
     "zustand": "^5.0.14"
   },
   "peerDependencies": {
-    "storybook": "^10.0.0"
+    "storybook": "^11.0.0"
   },
   "publishConfig": {
     "access": "public",

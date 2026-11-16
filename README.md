@@ -46,6 +46,8 @@ This addon requires Storybook 11. Run the following command to install and regis
 npx storybook add @storybook-community/storybook-addon-contentsquare
 ```
 
+### Install manually
+
 Or install it manually:
 
 ```sh
@@ -60,8 +62,7 @@ npm install -D @storybook-community/storybook-addon-contentsquare
 pnpm install -D @storybook-community/storybook-addon-contentsquare
 ```
 
-### Configure addon
-If you installed the addon manually, register it in your `.storybook/main.ts` file:
+Register the addon in your `.storybook/main.ts` file:
 
 ```ts
 // .storybook/main.ts

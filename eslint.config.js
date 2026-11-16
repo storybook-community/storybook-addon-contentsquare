@@ -1,3 +1,4 @@
+import { fixupConfigRules } from '@eslint/compat'
 import js from '@eslint/js'
 import prettierRecommended from 'eslint-plugin-prettier/recommended'
 import reactPlugin from 'eslint-plugin-react'
@@ -24,7 +25,8 @@ export default [
     ],
   },
   js.configs.recommended,
-  reactPlugin.configs.flat.recommended,
+  // eslint-plugin-react does not support ESLint 10 yet
+  ...fixupConfigRules(reactPlugin.configs.flat.recommended),
   {
     settings: {
       react: {

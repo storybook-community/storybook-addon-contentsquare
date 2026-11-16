@@ -9,12 +9,34 @@ interface ConsentStore {
   refreshConsentStatus: () => void
 }
 
-export function getConsentStatusFromStorage(): ConsentStatus {
+const CS_OPTOUT_ID = '_cs_optout'
+const EXPIRED = 'expires=Thu, 01 Jan 1970 00:00:00 GMT'
+
+// Contentsquare stores its opt-out in a cookie, or in localStorage for
+// projects with cookieless tracking.
+function hasContentsquareOptout(): boolean {
   const cookies = document.cookie.split(';').map((cookie) => cookie.trim())
-  for (const cookie of cookies) {
-    if (cookie.startsWith('_cs_optout=')) {
-      return 'opted-out'
-    }
+  return (
+    cookies.some((cookie) => cookie.startsWith(`${CS_OPTOUT_ID}=`)) ||
+    localStorage.getItem(CS_OPTOUT_ID) !== null
+  )
+}
+
+// Contentsquare sets its cookies on the site's root domain, which we don't
+// know, so expire the cookie on the host and on every parent domain.
+function clearContentsquareOptout() {
+  document.cookie = `${CS_OPTOUT_ID}=; path=/; ${EXPIRED}`
+  const labels = window.location.hostname.split('.')
+  for (let i = 0; i < labels.length; i++) {
+    const domain = labels.slice(i).join('.')
+    document.cookie = `${CS_OPTOUT_ID}=; domain=${domain}; path=/; ${EXPIRED}`
+  }
+  localStorage.removeItem(CS_OPTOUT_ID)
+}
+
+export function getConsentStatusFromStorage(): ConsentStatus {
+  if (hasContentsquareOptout()) {
+    return 'opted-out'
   }
 
   return localStorage.getItem(CONSENT_STORAGE_ID) as ConsentStatus
@@ -30,9 +52,11 @@ export const useConsentStore = create<ConsentStore>((set, get) => ({
       localStorage.setItem(CONSENT_STORAGE_ID, 'opted-in')
       set({ consentStatus: 'opted-in' })
 
-      // Destroy _cs_optout cookie then reload for it to take effect.
-      if (oldConsentStatus === 'opted-out') {
-        document.cookie = '_cs_optout=; path=/; max-age=0'
+      // The addon opts visitors out of Contentsquare until they consent, and
+      // Contentsquare has no opt-in command. Clear its opt-out, then reload
+      // for tracking to start.
+      if (oldConsentStatus !== 'opted-in') {
+        clearContentsquareOptout()
         window.location.reload()
       }
     } else {

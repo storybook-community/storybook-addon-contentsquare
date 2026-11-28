@@ -54,7 +54,6 @@
     "prepare": "husky",
     "prerelease": "zx scripts/prepublish-checks.js",
     "release": "pnpm build && pnpm semantic-release",
-    "release:canary": "pnpm build && auto canary",
     "start": "pnpm storybook",
     "storybook": "storybook dev -p 6006",
     "test": "vitest",

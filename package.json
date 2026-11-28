@@ -74,7 +74,6 @@
     "@vitest/browser": "^5.1.2",
     "@vitest/browser-playwright": "^5.1.2",
     "@vitest/coverage-istanbul": "^5.1.2",
-    "auto": "^11.3.6",
     "boxen": "^9.0.0",
     "commitlint": "^21.2.4",
     "dedent": "^1.7.2",
